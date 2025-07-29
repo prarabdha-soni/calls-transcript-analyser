@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/sales_calls
+      - DATABASE_URL_ASYNC=postgresql+asyncpg://user:password@db:5432/sales_calls
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
+    command: uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: sales_user
+      POSTGRES_PASSWORD: sales_password
+      POSTGRES_DB: sales_calls
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sales_user -d sales_calls"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  celeryworker:
+    build: .
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://sales_user:sales_password@db/sales_calls
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  celerybeat:
+    build: .
+    command: celery -A app.celery_app beat --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://sales_user:sales_password@db/sales_calls
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+volumes:
+  pgdata:
+  redis_data: 

@@ -24,22 +24,18 @@ def event_loop():
 @pytest.fixture(scope="session")
 async def test_engine():
     """Create test database engine."""
-    engine = create_async_engine(
-        TEST_DATABASE_URL,
-        echo=False,
-        future=True
-    )
-    
+    engine = create_async_engine(TEST_DATABASE_URL, echo=False, future=True)
+
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-        
+
         yield engine
-        
+
     finally:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
-        
+
         await engine.dispose()
 
 
@@ -47,11 +43,9 @@ async def test_engine():
 async def test_session(test_engine):
     """Create test database session."""
     async_session = sessionmaker(
-        test_engine,
-        class_=AsyncSession,
-        expire_on_commit=False
+        test_engine, class_=AsyncSession, expire_on_commit=False
     )
-    
+
     async with async_session() as session:
         yield session
 
@@ -72,7 +66,7 @@ def sample_call_data():
         "language": "en",
         "start_time": "2024-01-01T10:00:00",
         "duration_seconds": 300,
-        "transcript": "Agent: Hello, how can I help you today?\nCustomer: I'm interested in your product.\nAgent: Great! Let me tell you about our features."
+        "transcript": "Agent: Hello, how can I help you today?\nCustomer: I'm interested in your product.\nAgent: Great! Let me tell you about our features.",
     }
 
 
@@ -87,7 +81,7 @@ def sample_calls():
             "language": "en",
             "start_time": "2024-01-01T10:00:00",
             "duration_seconds": 300,
-            "transcript": "Agent: Hello, how can I help you today?\nCustomer: I'm interested in your product.\nAgent: Great! Let me tell you about our features."
+            "transcript": "Agent: Hello, how can I help you today?\nCustomer: I'm interested in your product.\nAgent: Great! Let me tell you about our features.",
         },
         {
             "call_id": "TEST_CALL_002",
@@ -96,6 +90,6 @@ def sample_calls():
             "language": "en",
             "start_time": "2024-01-01T11:00:00",
             "duration_seconds": 450,
-            "transcript": "Agent: Thank you for calling.\nCustomer: I have some questions about pricing.\nAgent: I'd be happy to discuss our pricing options."
-        }
+            "transcript": "Agent: Thank you for calling.\nCustomer: I have some questions about pricing.\nAgent: I'd be happy to discuss our pricing options.",
+        },
     ]

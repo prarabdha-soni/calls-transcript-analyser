@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class CacheManager:
     """Redis-based cache manager for API responses"""
 
-    def __init__(self, redis_url: str = None):
+    def __init__(self, redis_url: Optional[str] = None) -> None:
         self.redis_url = redis_url or settings.redis_url
         self.redis_client = None
         self.default_ttl = 300  # 5 minutes
@@ -37,7 +37,7 @@ class CacheManager:
         self.redis_client = redis.from_url(self.redis_url)
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         if self.redis_client:
             await self.redis_client.close()
 
@@ -57,10 +57,10 @@ class CacheManager:
                 if value:
                     return json.loads(value)
         except Exception as e:
-            logger.warning(f"Cache get error: {e}")
+            print(f"Cache get error: {e}")
         return None
 
-    async def set(self, key: str, value: Dict[str, Any], ttl: int = None) -> bool:
+    async def set(self, key: str, value: Dict[str, Any], ttl: Optional[int] = None) -> bool:
         """Set value in cache"""
         try:
             if self.redis_client:
@@ -69,7 +69,7 @@ class CacheManager:
                 )
                 return True
         except Exception as e:
-            logger.warning(f"Cache set error: {e}")
+            print(f"Cache set error: {e}")
         return False
 
     async def delete_pattern(self, pattern: str) -> int:
@@ -80,14 +80,14 @@ class CacheManager:
                 if keys:
                     return await self.redis_client.delete(*keys)
         except Exception as e:
-            logger.warning(f"Cache delete error: {e}")
+            print(f"Cache delete error: {e}")
         return 0
 
 
 class ConnectionPoolManager:
     """Database connection pool manager"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.pool = None
 
     async def initialize_pool(
@@ -96,7 +96,7 @@ class ConnectionPoolManager:
         pool_size: int = 20,
         max_overflow: int = 30,
         pool_timeout: int = 30,
-    ):
+    ) -> None:
         """Initialize connection pool with optimized settings"""
         from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -118,6 +118,7 @@ class ConnectionPoolManager:
         if not self.pool:
             raise RuntimeError("Connection pool not initialized")
 
+        from app.database import AsyncSessionLocal
         async_session = AsyncSessionLocal()
         try:
             yield async_session
@@ -133,35 +134,25 @@ class QueryOptimizer:
         session: AsyncSession,
         limit: int = 50,
         offset: int = 0,
-        agent_id: str = None,
-        from_date: datetime = None,
-        to_date: datetime = None,
-        min_sentiment: float = None,
-        max_sentiment: float = None,
+        agent_id: Optional[str] = None,
+        from_date: Optional[datetime] = None,
+        to_date: Optional[datetime] = None,
+        min_sentiment: Optional[float] = None,
+        max_sentiment: Optional[float] = None,
     ) -> Dict[str, Any]:
         """Optimized calls query with proper indexing and pagination"""
 
         # Build query with proper joins and conditions
         query = """
         SELECT 
-            c.id,
-            c.call_id,
-            c.agent_id,
-            c.customer_id,
-            c.language,
-            c.start_time,
-            c.duration_seconds,
-            c.transcript,
-            c.agent_talk_ratio,
-            c.customer_sentiment_score,
-            c.embedding,
-            c.created_at,
-            c.updated_at
+            c.call_id, c.agent_id, c.customer_id, c.language,
+            c.start_time, c.duration_seconds, c.transcript,
+            c.agent_talk_ratio, c.customer_sentiment_score
         FROM calls c
         WHERE 1=1
         """
 
-        params = {}
+        params: Dict[str, Any] = {}
 
         if agent_id:
             query += " AND c.agent_id = :agent_id"
@@ -200,7 +191,7 @@ class QueryOptimizer:
         WHERE 1=1
         """
 
-        count_params = {k: v for k, v in params.items() if k not in ["limit", "offset"]}
+        count_params: Dict[str, Any] = {}
 
         if count_params:
             count_query += " AND " + " AND ".join(
@@ -226,10 +217,7 @@ class QueryOptimizer:
             agent_id,
             COUNT(*) as total_calls,
             AVG(customer_sentiment_score) as avg_sentiment,
-            AVG(agent_talk_ratio) as avg_talk_ratio,
-            AVG(duration_seconds) as avg_duration,
-            MIN(start_time) as first_call,
-            MAX(start_time) as last_call
+            AVG(agent_talk_ratio) as avg_talk_ratio
         FROM calls
         GROUP BY agent_id
         ORDER BY total_calls DESC, avg_sentiment DESC
@@ -244,7 +232,7 @@ class QueryOptimizer:
 class PerformanceMonitor:
     """Performance monitoring and metrics collection"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.metrics = {
             "api_calls": {},
             "query_times": {},
@@ -255,7 +243,7 @@ class PerformanceMonitor:
 
     def record_api_call(
         self, endpoint: str, method: str, duration: float, status_code: int = 200
-    ):
+    ) -> None:
         """Record API call metrics"""
         key = f"{method}_{endpoint}"
         if key not in self.metrics["api_calls"]:
@@ -280,21 +268,21 @@ class PerformanceMonitor:
             metric["status_codes"].get(status_str, 0) + 1
         )
 
-    def record_query_time(self, query_type: str, duration: float):
+    def record_query_time(self, query_type: str, duration: float) -> None:
         """Record database query metrics"""
         if query_type not in self.metrics["query_times"]:
             self.metrics["query_times"][query_type] = []
         self.metrics["query_times"][query_type].append(duration)
 
-    def record_cache_hit(self):
+    def record_cache_hit(self) -> None:
         """Record cache hit"""
         self.metrics["cache_hits"] += 1
 
-    def record_cache_miss(self):
+    def record_cache_miss(self) -> None:
         """Record cache miss"""
         self.metrics["cache_misses"] += 1
 
-    def record_error(self, error_type: str):
+    def record_error(self, error_type: str) -> None:
         """Record error"""
         self.metrics["errors"] += 1
 

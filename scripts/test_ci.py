@@ -2,9 +2,9 @@
 """
 Local CI test script to verify the GitHub Actions workflow steps
 """
+import os
 import subprocess
 import sys
-import os
 from pathlib import Path
 
 

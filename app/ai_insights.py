@@ -1,10 +1,12 @@
-import json
-import numpy as np
-from typing import Tuple, List
 import hashlib
+import json
 import random
+from typing import List, Tuple
+
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
+
 from app.config import settings
 
 

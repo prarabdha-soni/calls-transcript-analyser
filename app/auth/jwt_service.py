@@ -1,7 +1,9 @@
-import jwt
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
+import jwt
 from passlib.context import CryptContext
+
 from app.config import settings
 
 

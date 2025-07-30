@@ -4,25 +4,26 @@ Load Testing Script for Sales Call Analytics API
 Tests both data ingestion and API query performance under high load.
 """
 
+import argparse
 import asyncio
-import aiohttp
-import time
-import random
 import json
-from concurrent.futures import ThreadPoolExecutor
-from typing import List, Dict, Any
+import os
+import random
 import statistics
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import argparse
-import sys
-import os
+from typing import Any, Dict, List
+
+import aiohttp
 
 # Add the project root to the path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.data_ingestion import CallTranscriptGenerator, DataIngestionPipeline
 from app.crud import CRUD
+from app.data_ingestion import CallTranscriptGenerator, DataIngestionPipeline
 
 
 @dataclass

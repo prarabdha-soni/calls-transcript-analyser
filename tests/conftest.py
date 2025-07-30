@@ -1,13 +1,14 @@
-import pytest
 import asyncio
 import os
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+
+import pytest
 from fastapi.testclient import TestClient
-from app.database import Base
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+
 from app.api import app
 from app.config import settings
-
+from app.database import Base
 
 # Test database URL - use PostgreSQL in CI, SQLite locally
 if os.getenv("CI"):

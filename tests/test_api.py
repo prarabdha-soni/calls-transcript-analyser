@@ -1,9 +1,11 @@
+from datetime import datetime
+
 import pytest
 from fastapi.testclient import TestClient
+
 from app.api import app
 from app.crud import CallCRUD
 from app.models import Call
-from datetime import datetime
 
 
 class TestAPIEndpoints:

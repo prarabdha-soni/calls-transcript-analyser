@@ -5,14 +5,14 @@ This script generates synthetic call data and ingests it into the database.
 """
 
 import asyncio
-import sys
 import os
+import sys
 
 # Add the app directory to the Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from app.database import get_async_db
 from app.data_ingestion import run_ingestion_pipeline
+from app.database import get_async_db
 
 
 async def main():

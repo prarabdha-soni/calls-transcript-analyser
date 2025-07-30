@@ -1,6 +1,7 @@
-from app.celery_app import celery_app
 import logging
 from datetime import datetime
+
+from app.celery_app import celery_app
 
 
 @celery_app.task

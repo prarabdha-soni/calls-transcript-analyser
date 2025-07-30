@@ -1,6 +1,8 @@
-from fastapi import Depends, HTTPException, status, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional
+
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
 from app.auth.jwt_service import jwt_service
 from app.auth.models import TokenData
 from app.config import settings

@@ -1,6 +1,12 @@
+import asyncio
+import json
+import random
+from datetime import datetime
+from typing import List, Optional
+
 from fastapi import (
-    FastAPI,
     Depends,
+    FastAPI,
     HTTPException,
     Query,
     WebSocket,
@@ -8,28 +14,23 @@ from fastapi import (
 )
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Optional, List
-import json
-import random
-import asyncio
-from datetime import datetime
 
+from app.auth.dependencies import get_current_user
+from app.auth.models import TokenData
+from app.auth.routes import router as auth_router
+from app.config import settings
+from app.crud import AgentCRUD, CallCRUD
 from app.database import get_async_db
-from app.crud import CallCRUD, AgentCRUD
 from app.schemas import (
+    AgentAnalyticsResponse,
     Call,
     CallListResponse,
-    CallRecommendationsResponse,
-    CallRecommendation,
-    CoachingNudge,
-    AgentAnalyticsResponse,
     CallQueryParams,
+    CallRecommendation,
+    CallRecommendationsResponse,
+    CoachingNudge,
     ErrorResponse,
 )
-from app.auth.models import TokenData
-from app.config import settings
-from app.auth.routes import router as auth_router
-from app.auth.dependencies import get_current_user
 
 app = FastAPI(
     title=settings.project_name,

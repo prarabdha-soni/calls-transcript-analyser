@@ -1,6 +1,8 @@
-import pytest
 import json
+
 import numpy as np
+import pytest
+
 from app.ai_insights import AnalyticsProcessor
 
 

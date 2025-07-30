@@ -4,32 +4,33 @@ Includes caching, connection pooling, and performance monitoring.
 """
 
 import time
-from typing import List, Optional
 from datetime import datetime
-from fastapi import FastAPI, Depends, HTTPException, Query, BackgroundTasks
+from typing import List, Optional
+
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_async_db
-from app.schemas import (
-    CallListResponse,
-    Call,
-    CallRecommendationsResponse,
-    AgentAnalyticsResponse,
-    ErrorResponse,
-)
+from app.config import settings
 from app.crud import CRUD
+from app.database import get_async_db
 from app.performance import (
+    cache_manager,
     cache_response,
     monitor_performance,
     performance_monitor,
-    query_optimizer,
     pool_manager,
-    cache_manager,
+    query_optimizer,
 )
-from app.config import settings
+from app.schemas import (
+    AgentAnalyticsResponse,
+    Call,
+    CallListResponse,
+    CallRecommendationsResponse,
+    ErrorResponse,
+)
 
 # Initialize FastAPI app with performance optimizations
 app = FastAPI(

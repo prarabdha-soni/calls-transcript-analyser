@@ -1,15 +1,16 @@
 import asyncio
-import aiohttp
 import json
 import os
-from datetime import datetime, timedelta
-from typing import List, Dict, Any
-from faker import Faker
 import random
-from app.ai_insights import analytics_processor
-from app.models import Call
+from datetime import datetime, timedelta
+from typing import Any, Dict, List
+
+import aiohttp
+from faker import Faker
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.ai_insights import analytics_processor
+from app.models import Call
 
 fake = Faker()
 

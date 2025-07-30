@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordRequestForm
-from app.auth.models import UserCreate, UserLogin, Token, User
-from app.auth.jwt_service import jwt_service
 from datetime import timedelta
-from app.auth.dependencies import get_current_active_user, TokenData
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+
+from app.auth.dependencies import TokenData, get_current_active_user
+from app.auth.jwt_service import jwt_service
+from app.auth.models import Token, User, UserCreate, UserLogin
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 

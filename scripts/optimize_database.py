@@ -5,17 +5,18 @@ Adds performance indexes and optimizes database for high load.
 """
 
 import asyncio
-import sys
 import os
-from sqlalchemy import text, create_engine
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+import sys
+
+from sqlalchemy import create_engine, text
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 # Add the project root to the path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.config import settings
-from app.database import engine, async_engine
+from app.database import async_engine, engine
 
 
 class DatabaseOptimizer:

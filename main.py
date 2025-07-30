@@ -4,6 +4,7 @@ Main entry point for the Sales Call Analytics API.
 """
 
 import uvicorn
+
 from app.api import app
 from app.config import settings
 

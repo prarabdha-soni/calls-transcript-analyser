@@ -4,19 +4,20 @@ Application Scaling Script
 Runs multiple API instances and coordinates load balancing.
 """
 
-import asyncio
-import subprocess
-import time
-import signal
-import sys
-import os
 import argparse
+import asyncio
 import json
-from typing import List, Dict, Any
+import logging
+import os
+import signal
+import subprocess
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, List
+
 import psutil
 import requests
-from concurrent.futures import ThreadPoolExecutor
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

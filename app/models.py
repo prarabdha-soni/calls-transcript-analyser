@@ -1,9 +1,11 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, Text, ForeignKey, Index
-from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import TSVECTOR
-from sqlalchemy.sql import func
-from app.database import Base
 import uuid
+
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Index, Integer, String, Text
+from sqlalchemy.dialects.postgresql import TSVECTOR
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+
+from app.database import Base
 
 
 class Call(Base):

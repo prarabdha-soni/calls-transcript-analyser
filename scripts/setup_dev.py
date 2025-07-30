@@ -4,10 +4,10 @@ Development setup script for the Sales Call Analytics API.
 This script helps set up the development environment.
 """
 
-import os
-import sys
-import subprocess
 import asyncio
+import os
+import subprocess
+import sys
 from pathlib import Path
 
 

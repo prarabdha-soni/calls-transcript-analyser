@@ -1,15 +1,15 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_, or_
-from sqlalchemy.orm import selectinload
-from typing import List, Optional
-from datetime import datetime
 import json
-import numpy as np
-from sqlalchemy import text
+from datetime import datetime
+from typing import List, Optional
 
-from app.models import Call, Agent, Customer
-from app.schemas import CallQueryParams
+import numpy as np
+from sqlalchemy import and_, func, or_, select, text
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.ai_insights import analytics_processor
+from app.models import Agent, Call, Customer
+from app.schemas import CallQueryParams
 
 
 class CallCRUD:

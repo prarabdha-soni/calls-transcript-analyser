@@ -2,14 +2,14 @@ import logging
 from datetime import datetime
 
 from celery import Celery
-from app.config import settings
 
+from app.config import settings
 
 celery_app = Celery(
     "sales_analytics",
     broker=settings.redis_url,
     backend=settings.redis_url,
-    include=["app.tasks"]
+    include=["app.tasks"],
 )
 
 celery_app.conf.update(

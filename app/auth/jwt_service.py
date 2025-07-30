@@ -1,7 +1,9 @@
-import jwt
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
+import jwt
 from passlib.context import CryptContext
+
 from app.config import settings
 
 
@@ -20,14 +22,18 @@ class JWTAuthService:
         """Generate password hash"""
         return str(self.pwd_context.hash(password))
 
-    def create_access_token(self, data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    def create_access_token(
+        self, data: Dict[str, Any], expires_delta: Optional[timedelta] = None
+    ) -> str:
         """Create JWT access token"""
         to_encode = data.copy()
 
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(minutes=self.access_token_expire_minutes)
+            expire = datetime.utcnow() + timedelta(
+                minutes=self.access_token_expire_minutes
+            )
 
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
@@ -44,11 +50,7 @@ class JWTAuthService:
             if username is None:
                 return None
 
-            return {
-                "username": username,
-                "user_id": user_id,
-                "role": role
-            }
+            return {"username": username, "user_id": user_id, "role": role}
         except jwt.PyJWTError:
             return None
 

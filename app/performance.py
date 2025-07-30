@@ -60,7 +60,9 @@ class CacheManager:
             print(f"Cache get error: {e}")
         return None
 
-    async def set(self, key: str, value: Dict[str, Any], ttl: Optional[int] = None) -> bool:
+    async def set(
+        self, key: str, value: Dict[str, Any], ttl: Optional[int] = None
+    ) -> bool:
         """Set value in cache"""
         try:
             if self.redis_client:
@@ -119,6 +121,7 @@ class ConnectionPoolManager:
             raise RuntimeError("Connection pool not initialized")
 
         from app.database import AsyncSessionLocal
+
         async_session = AsyncSessionLocal()
         try:
             yield async_session

@@ -18,8 +18,9 @@ from app.database import get_async_db
 async def main():
     """Main function to run the ingestion pipeline"""
     try:
-        db = await get_async_db()
-        await run_ingestion_pipeline(db, num_calls=200)
+        async for db in get_async_db():
+            await run_ingestion_pipeline(db, num_calls=200)
+            break  # We only need one session
     except Exception as e:
         print(f"Error during data ingestion: {e}")
 

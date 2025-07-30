@@ -4,8 +4,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/sales_calls
-      - DATABASE_URL_ASYNC=postgresql+asyncpg://user:password@db:5432/sales_calls
+      - DATABASE_URL=postgresql://sales_user:sales_password@db:5432/sales_calls
+      - DATABASE_URL_ASYNC=postgresql+asyncpg://sales_user:sales_password@db:5432/sales_calls
       - REDIS_URL=redis://redis:6379
     depends_on:
       - db

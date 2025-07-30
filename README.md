@@ -69,12 +69,67 @@ A Python microservice that ingests sales call transcripts, stores them durably, 
 
 4. **Ingest sample data**
    ```bash
-   docker-compose exec app python scripts/ingest_data.py
+   docker-compose exec app python scripts/ingest_data_simple.py
    ```
 
 5. **Access the API**
    - API Documentation: http://localhost:8000/docs
    - Health Check: http://localhost:8000/health
+
+### Troubleshooting
+
+#### Database Authentication Issues
+If you encounter database authentication errors like "password authentication failed for user", the issue is likely a mismatch between database credentials in different configuration files. To fix this:
+
+1. **Check and restart containers**
+   ```bash
+   docker-compose down
+   docker-compose up -d
+   ```
+
+2. **Verify database connection**
+   ```bash
+   docker-compose exec app python scripts/test_db.py
+   ```
+
+3. **Test data ingestion without AI models**
+   ```bash
+   docker-compose exec app python scripts/simple_ingest.py
+   ```
+
+#### AI Model Loading Issues
+If the data ingestion script hangs due to AI model loading, use the simplified version:
+
+```bash
+docker-compose exec app python scripts/ingest_data_simple.py
+```
+
+This version bypasses the AI insights module and uses simple calculations for sentiment and embeddings.
+
+#### API Authentication
+The API endpoints require authentication. Use the predefined user credentials:
+
+1. **Login to get a JWT token**
+   ```bash
+   curl -X POST "http://localhost:8000/auth/login" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "username=user&password=user123"
+   ```
+
+2. **Use the token in API requests**
+   ```bash
+   curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+     http://localhost:8000/api/v1/calls
+   ```
+
+#### Database Verification
+To check if data was ingested successfully:
+
+```bash
+docker-compose exec app python scripts/check_db.py
+```
+
+This will show the total number of calls and a sample call record.
 
 ### Local Development
 
@@ -129,18 +184,33 @@ A Python microservice that ingests sales call transcripts, stores them durably, 
 
 ### Example Usage
 
+**Note**: All API endpoints require authentication. First, get a JWT token:
+
 ```bash
-# Get all calls
-curl "http://localhost:8000/api/v1/calls"
+# Login to get access token
+curl -X POST "http://localhost:8000/auth/login" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=user&password=user123"
+```
+
+Then use the token in your requests:
+
+```bash
+# Get all calls (replace YOUR_JWT_TOKEN with the actual token)
+curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  "http://localhost:8000/api/v1/calls"
 
 # Get calls for a specific agent
-curl "http://localhost:8000/api/v1/calls?agent_id=AGENT_001"
+curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  "http://localhost:8000/api/v1/calls?agent_id=AGENT_001"
 
 # Get calls with sentiment filter
-curl "http://localhost:8000/api/v1/calls?min_sentiment=0.5"
+curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  "http://localhost:8000/api/v1/calls?min_sentiment=0.5"
 
 # Get agent analytics
-curl "http://localhost:8000/api/v1/analytics/agents"
+curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  "http://localhost:8000/api/v1/analytics/agents"
 ```
 
 ## Data Model

@@ -29,10 +29,12 @@ def test_openapi_schema():
 def test_app_import():
     """Test that the app can be imported without errors."""
     from app.api import app
+
     assert app is not None
 
 
 def test_config_import():
     """Test that config can be imported without errors."""
     from app.config import settings
-    assert settings is not None 
+
+    assert settings is not None

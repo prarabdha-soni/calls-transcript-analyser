@@ -5,20 +5,14 @@ from sqlalchemy import create_engine
 from app.config import settings
 
 # Async engine for FastAPI
-async_engine = create_async_engine(
-    settings.database_url_async,
-    echo=True,
-    future=True
-)
+async_engine = create_async_engine(settings.database_url_async, echo=True, future=True)
 
 # Sync engine for Alembic
 engine = create_engine(settings.database_url)
 
 # Session factories
 AsyncSessionLocal = async_sessionmaker(
-    async_engine,
-    class_=AsyncSession,
-    expire_on_commit=False
+    async_engine, class_=AsyncSession, expire_on_commit=False
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -42,4 +36,4 @@ def get_db():
     try:
         yield db
     finally:
-        db.close() 
+        db.close()

@@ -5,10 +5,12 @@ Test script to verify ML models are working correctly
 
 import sys
 import os
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.ai_insights import analytics_processor
 from app.config import settings
+
 
 def test_ml_models():
     test_transcript = """
@@ -25,7 +27,11 @@ Customer: I'm very happy with what I've heard so far!
         print(f"Sentiment Analysis Failed: {e}")
     try:
         embedding = analytics_processor.transcript_embedding(test_transcript)
-        embedding_list = analytics_processor.embedding_model.encode(test_transcript).tolist() if analytics_processor.embedding_model else []
+        embedding_list = (
+            analytics_processor.embedding_model.encode(test_transcript).tolist()
+            if analytics_processor.embedding_model
+            else []
+        )
     except Exception as e:
         print(f"Embedding Generation Failed: {e}")
     try:
@@ -33,7 +39,9 @@ Customer: I'm very happy with what I've heard so far!
     except Exception as e:
         print(f"Talk Ratio Calculation Failed: {e}")
     try:
-        agent_ratio, sentiment_score, embedding = analytics_processor.process(test_transcript)
+        agent_ratio, sentiment_score, embedding = analytics_processor.process(
+            test_transcript
+        )
     except Exception as e:
         print(f"Complete Processing Failed: {e}")
     if not analytics_processor.embedding_model:
@@ -41,5 +49,6 @@ Customer: I'm very happy with what I've heard so far!
     if not analytics_processor.sentiment_model:
         print("Sentiment Model: Not loaded (using fallback)")
 
+
 if __name__ == "__main__":
-    test_ml_models() 
+    test_ml_models()

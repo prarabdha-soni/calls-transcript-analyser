@@ -10,14 +10,8 @@ from app.config import settings
 
 def main():
     """Run the application."""
-    uvicorn.run(
-        "app.api:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
-    )
+    uvicorn.run("app.api:app", host="0.0.0.0", port=8000, reload=True, log_level="info")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

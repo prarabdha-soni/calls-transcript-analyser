@@ -9,7 +9,7 @@ import sys
 import os
 
 # Add the app directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from app.database import get_async_db
 from app.data_ingestion import run_ingestion_pipeline
@@ -25,4 +25,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

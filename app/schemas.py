@@ -30,7 +30,7 @@ class Call(CallBase):
     embedding: Optional[str] = None
     created_at: datetime
     updated_at: datetime
-    
+
     class Config:
         from_attributes = True
 
@@ -82,4 +82,4 @@ class CallQueryParams(BaseModel):
 
 class ErrorResponse(BaseModel):
     detail: str
-    error_code: Optional[str] = None 
+    error_code: Optional[str] = None

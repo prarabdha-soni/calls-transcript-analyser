@@ -14,9 +14,11 @@ def run_command(command, description):
     print(f"Running: {description}")
     print(f"Command: {command}")
     print(f"{'='*50}")
-    
+
     try:
-        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
+        result = subprocess.run(
+            command, shell=True, check=True, capture_output=True, text=True
+        )
         print("✅ SUCCESS")
         if result.stdout:
             print("Output:", result.stdout)
@@ -30,25 +32,29 @@ def run_command(command, description):
 def main():
     """Run CI steps locally."""
     print("🚀 Starting local CI test...")
-    
+
     # Step 1: Install dependencies
     if not run_command("pip install -r requirements.txt", "Installing dependencies"):
         return False
-    
+
     # Step 2: Run linting
     if not run_command("black --check --diff .", "Running Black linting"):
         return False
-    
+
     if not run_command("isort --check-only --diff .", "Running isort linting"):
         return False
-    
-    if not run_command("mypy app/ --ignore-missing-imports", "Running mypy type checking"):
+
+    if not run_command(
+        "mypy app/ --ignore-missing-imports", "Running mypy type checking"
+    ):
         return False
-    
+
     # Step 3: Run basic tests (without database)
-    if not run_command("python -m pytest tests/test_basic.py -v", "Running basic tests"):
+    if not run_command(
+        "python -m pytest tests/test_basic.py -v", "Running basic tests"
+    ):
         return False
-    
+
     print("\n🎉 Local CI test completed successfully!")
     print("Note: Full tests with database require PostgreSQL and Redis services.")
     return True
@@ -56,4 +62,4 @@ def main():
 
 if __name__ == "__main__":
     success = main()
-    sys.exit(0 if success else 1) 
+    sys.exit(0 if success else 1)

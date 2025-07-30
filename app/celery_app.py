@@ -6,7 +6,7 @@ celery_app = Celery(
     "sales_analytics",
     broker=settings.redis_url,
     backend=settings.redis_url,
-    include=["app.tasks"]
+    include=["app.tasks"],
 )
 
 celery_app.conf.update(
@@ -21,4 +21,4 @@ celery_app.conf.update(
             "schedule": crontab(hour=2, minute=0),  # Every night at 2am UTC
         },
     },
-) 
+)

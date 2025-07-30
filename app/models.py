@@ -5,6 +5,7 @@ from sqlalchemy.sql import func
 from app.database import Base
 import uuid
 
+
 class Call(Base):
     __tablename__ = "calls"
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -24,8 +25,9 @@ class Call(Base):
     # Choice: GIN index with tsvector for fast text search, stemming, and relevance ranking
     # This enables queries like: WHERE to_tsvector('english', transcript) @@ plainto_tsquery('pricing discussion')
     __table_args__ = (
-        Index('idx_transcript_fts', 'transcript', postgresql_using='gin'),
+        Index("idx_transcript_fts", "transcript", postgresql_using="gin"),
     )
+
 
 class Agent(Base):
     __tablename__ = "agents"
@@ -39,6 +41,7 @@ class Agent(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
+
 class Customer(Base):
     __tablename__ = "customers"
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -46,4 +49,4 @@ class Customer(Base):
     name = Column(String, nullable=False)
     email = Column(String, unique=True)
     created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now()) 
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

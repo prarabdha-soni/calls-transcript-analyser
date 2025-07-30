@@ -1,0 +1,53 @@
+Sales Call Analytics System - Technical Details
+
+1. Data Ingestion
+- Ingests sales call data, either real or synthetic, including metadata and full transcripts.
+- Supports both bulk and streaming ingestion for historical and real-time data.
+
+2. Transcript Processing
+- Parses each transcript to separate agent and customer speech.
+- Calculates talk ratios to assess conversation balance.
+- Extracts key phrases, topics, and conversational patterns.
+
+3. AI-Driven Analytics
+- Applies sentiment analysis to customer speech, assigning a sentiment score.
+- Generates vector embeddings for semantic similarity and recommendations.
+- Provides actionable insights, such as identifying negative calls or suggesting similar calls for training.
+
+4. Data Storage
+- Stores all raw data and analytics in a relational database.
+- Uses indexes for fast querying by agent, date, sentiment, etc.
+- Implements full-text search on transcripts for efficient keyword/topic search.
+
+5. API Layer
+- Exposes a RESTful API for external access to data and analytics.
+- Endpoints support call listing, detail retrieval, recommendations, and aggregated analytics.
+- All endpoints require authentication.
+
+6. Authentication and Security
+- Supports user registration and login with secure password storage.
+- Uses token-based authentication and role-based access control.
+
+7. Real-Time Features
+- Provides real-time sentiment streaming via WebSockets.
+- Sends live sentiment updates during calls for supervisor monitoring.
+
+8. Background Processing
+- Handles heavy analytics tasks asynchronously to keep the API responsive.
+- Processes statistics, reports, and large data batches in the background.
+
+9. Caching and Performance
+- Caches frequently accessed data and API responses.
+- Uses connection pooling and query optimization for high throughput and low latency.
+
+10. Monitoring and Health Checks
+- Includes health check endpoints and internal monitoring for system status.
+- Collects performance metrics (response times, error rates, resource usage).
+
+11. Deployment and Scalability
+- Containerized for easy deployment and consistent environments.
+- Supports horizontal scaling of API and background workers.
+- Can add database replicas or cache nodes to handle increased load.
+
+Summary:
+The system automates the collection, analysis, and delivery of insights from sales call transcripts, combining data parsing, AI analytics, secure storage, real-time features, and robust APIs to support sales teams and managers with actionable intelligence, while ensuring performance, security, and scalability. 

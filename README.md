@@ -243,20 +243,3 @@ docker run -p 8000:8000 sales-call-analytics
 | `REDIS_URL` | Redis connection string | `redis://localhost:6379` |
 | `SECRET_KEY` | JWT secret key | `your-secret-key-here` |
 | `OPENAI_API_KEY` | (optional, for LLM integration) | `None` |
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite
-6. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support and questions, please open an issue on GitHub or contact the development team. 

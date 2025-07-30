@@ -1,5 +1,6 @@
 import pytest
 import asyncio
+import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
@@ -8,8 +9,11 @@ from app.api import app
 from app.config import settings
 
 
-# Test database URL
-TEST_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+# Test database URL - use PostgreSQL in CI, SQLite locally
+if os.getenv("CI"):
+    TEST_DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/sales_calls_test"
+else:
+    TEST_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 
 
 @pytest.fixture(scope="session")
@@ -29,15 +33,17 @@ async def test_engine():
         future=True
     )
     
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    
-    yield engine
-    
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-    
-    await engine.dispose()
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        
+        yield engine
+        
+    finally:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+        
+        await engine.dispose()
 
 
 @pytest.fixture

@@ -1,13 +1,14 @@
-import pytest
 import asyncio
 import os
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+
+import pytest
 from fastapi.testclient import TestClient
-from app.database import Base
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+
 from app.api import app
 from app.config import settings
-
+from app.database import Base
 
 # Always use SQLite for testing to avoid database connection issues
 TEST_DATABASE_URL = "sqlite+aiosqlite:///./test.db"
